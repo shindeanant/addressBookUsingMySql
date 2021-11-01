@@ -1,0 +1,248 @@
+-- AddressBook Service ---
+
+===========================================================
+--> UC1 Creating database as AddessBookService
+===========================================================
+
+mysql> create database address_book_serice;
+Query OK, 1 row affected (0.03 sec)
+
+mysql> show databases;
++---------------------+
+| Database            |
++---------------------+
+| address_book_serice |
+| blzdemo             |
+| information_schema  |
+| learn               |
+| mysql               |
+| payroll_service     |
+| performance_schema  |
+| sakila              |
+| student             |
+| sys                 |
+| user                |
+| world               |
++---------------------+
+12 rows in set (0.03 sec)
+
+===========================================================
+--> UC2  creating table as AddressBook with attributes
+===========================================================
+
+mysql> use address_book_service;
+Database changed
+
+mysql> desc address_book;
++--------------+--------------+------+-----+---------+-------+
+| Field        | Type         | Null | Key | Default | Extra |
++--------------+--------------+------+-----+---------+-------+
+| first_name   | varchar(200) | YES  |     | NULL    |       |
+| last_name    | varchar(200) | YES  |     | NULL    |       |
+| address      | varchar(250) | NO   |     | NULL    |       |
+| city         | varchar(50)  | YES  |     | NULL    |       |
+| state        | varchar(50)  | YES  |     | NULL    |       |
+| zip          | int          | NO   |     | NULL    |       |
+| phone_num    | int          | NO   |     | NULL    |       |
+| email        | varchar(250) | YES  |     | NULL    |       |
+| contact_type | varchar(250) | NO   |     | NULL    |       |
+| book_name    | varchar(100) | NO   |     | NULL    |       |
+| friend       | varchar(100) | YES  |     | NULL    |       |
+| family       | varchar(100) | YES  |     | NULL    |       |
++--------------+--------------+------+-----+---------+-------+
+
+===========================================================
+--> UC3 inserting new Contacts to AddressBook table
+===========================================================
+
+
+mysql> show tables;
++--------------------------------+
+| Tables_in_address_book_service |
++--------------------------------+
+| address_book                   |
++--------------------------------+
+1 row in set (0.04 sec)
+
+mysql> insert into address_book values("Anant","Hadpsar","Pune","Maharashtra",624308,762083983,"shindeanant@gmail.com");
+ERROR 1136 (21S01): Column count doesn't match value count at row 1
+mysql> insert into address_book values("Anant","Shinde","Hadpsar","Pune","Maharashtra",624308,762083983,"shindeanant@gmail.com");
+Query OK, 1 row affected (0.11 sec)
+
+mysql> insert into address_book values("Aditya","Done","Sreenagar","Nanded","Maharashtra",624308,762083983,"shindeanant@gmail.com");
+Query OK, 1 row affected (0.04 sec)
+
+mysql> select * from address_book;
++------------+-----------+-----------+--------+-------------+--------+-----------+-----------------------+
+| first_name | last_name | address   | city   | state       | zip    | phone_num | email                 |
++------------+-----------+-----------+--------+-------------+--------+-----------+-----------------------+
+| Anant      | Shinde    | Hadpsar   | Pune   | Maharashtra | 624308 | 762083983 | shindeanant@gmail.com |
+| Aditya     | Done      | Sreenagar | Nanded | Maharashtra | 624308 | 762083983 | shindeanant@gmail.com |
++------------+-----------+-----------+--------+-------------+--------+-----------+-----------------------+
+2 rows in set (0.00 sec)
+
+===========================================================
+--> UC4 editing the existing contact by their firstname
+===========================================================
+
+
+mysql> update address_book set address="Vimannagr", city="Latur" where first_name = "Aditya";
+Query OK, 1 row affected (0.07 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from address_book;
++------------+-----------+-----------+-------+-------------+--------+-----------+-----------------------+
+| first_name | last_name | address   | city  | state       | zip    | phone_num | email                 |
++------------+-----------+-----------+-------+-------------+--------+-----------+-----------------------+
+| Anant      | Shinde    | Hadpsar   | Pune  | Maharashtra | 624308 | 762083983 | shindeanant@gmail.com |
+| Aditya     | Done      | Vimannagr | Latur | Maharashtra | 624308 | 762083983 | shindeanant@gmail.com |
++------------+-----------+-----------+-------+-------------+--------+-----------+-----------------------+
+2 rows in set (0.00 sec)
+
+===========================================================
+--> UC5 -Ability to delete a person using person's name
+===========================================================
+
+
+mysql> delete from address_book where first_name = "Anant";
+Query OK, 1 row affected (0.04 sec)
+
+mysql> select * from address_book;
++------------+-----------+-----------+-------+-------------+--------+-----------+-----------------------+
+| first_name | last_name | address   | city  | state       | zip    | phone_num | email                 |
++------------+-----------+-----------+-------+-------------+--------+-----------+-----------------------+
+| Aditya     | Done      | Vimannagr | Latur | Maharashtra | 624308 | 762083983 | shindeanant@gmail.com |
++------------+-----------+-----------+-------+-------------+--------+-----------+-----------------------+
+1 row in set (0.00 sec)
+
+===========================================================
+--> UC6 retrieving the person by city or state
+===========================================================
+
+mysql> select * from address_book where city = "Latur" or state = "Maharashtra";
++------------+-----------+-----------+-------+-------------+--------+-----------+-----------------------+
+| first_name | last_name | address   | city  | state       | zip    | phone_num | email                 |
++------------+-----------+-----------+-------+-------------+--------+-----------+-----------------------+
+| Aditya     | Done      | Vimannagr | Latur | Maharashtra | 624308 | 762083983 | shindeanant@gmail.com |
++------------+-----------+-----------+-------+-------------+--------+-----------+-----------------------+
+1 row in set (0.02 sec)
+
+=========================================================================
+--> UC7 Ability to understand the size of address book by City and State
+=========================================================================
+
+mysql> select count(first_name) from address_book where city = "Latur";
++-------------------+
+| count(first_name) |
++-------------------+
+|                 1 |
++-------------------+
+1 row in set (0.09 sec)
+
+================================================================================
+--> UC8 retrieve entries sorted alphabetically by Person’s name for a given city
+================================================================================
+
+
+mysql> select count(first_name) from address_book where state="Maharashtra";
++-------------------+
+| count(first_name) |
++-------------------+
+|                 1 |
++-------------------+
+1 row in set (0.00 sec)
+
+mysql> select first_name, city from address_book order by city;
++------------+-------+
+| first_name | city  |
++------------+-------+
+| Aditya     | Latur |
++------------+-------+
+1 row in set (0.08 sec)
+
+==================================================================
+-- UC9- altering the table with addressbook name and contact type
+==================================================================
+
+mysql> alter table address_book add contact_type varchar(250) not null, add book_name varchar(100) not null;
+Query OK, 0 rows affected (0.15 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> select * from address_book;
++------------+-----------+-----------+-------+-------------+--------+-----------+-----------------------+--------------+-----------+
+| first_name | last_name | address   | city  | state       | zip    | phone_num | email                 | contact_type | book_name |
++------------+-----------+-----------+-------+-------------+--------+-----------+-----------------------+--------------+-----------+
+| Aditya     | Done      | Vimannagr | Latur | Maharashtra | 624308 | 762083983 | shindeanant@gmail.com |              |           |
++------------+-----------+-----------+-------+-------------+--------+-----------+-----------------------+--------------+-----------+
+1 row in set (0.00 sec)
+
+mysql> update address_book set contact_type ="Profession",  book_name ="one" where first_name ="Aditya";
+Query OK, 1 row affected (0.02 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from address_book;
++------------+-----------+-----------+-------+-------------+--------+-----------+-----------------------+--------------+-----------+
+| first_name | last_name | address   | city  | state       | zip    | phone_num | email                 | contact_type | book_name |
++------------+-----------+-----------+-------+-------------+--------+-----------+-----------------------+--------------+-----------+
+| Aditya     | Done      | Vimannagr | Latur | Maharashtra | 624308 | 762083983 | shindeanant@gmail.com | Profession   | one       |
++------------+-----------+-----------+-------+-------------+--------+-----------+-----------------------+--------------+-----------+
+1 row in set (0.00 sec)
+
+======================================================================
+--> UC10 ability to get number of contact persons count by contactType
+======================================================================
+
+mysql> select count(*) from address_book where contact_type="Profession";
++----------+
+| count(*) |
++----------+
+|        1 |
++----------+
+1 row in set (0.00 sec)
+
+mysql> alter table address_book add friend varchar(100),add family varchar(100);
+Query OK, 0 rows affected (0.17 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> select * from address_book;
++------------+-----------+-----------+-------+-------------+--------+-----------+-----------------------+--------------+-----------+--------+--------+
+| first_name | last_name | address   | city  | state       | zip    | phone_num | email                 | contact_type | book_name | friend | family |
++------------+-----------+-----------+-------+-------------+--------+-----------+-----------------------+--------------+-----------+--------+--------+
+| Aditya     | Done      | Vimannagr | Latur | Maharashtra | 624308 | 762083983 | shindeanant@gmail.com | Profession   | one       | NULL   | NULL   |
++------------+-----------+-----------+-------+-------------+--------+-----------+-----------------------+--------------+-----------+--------+--------+
+1 row in set (0.00 sec)
+
+mysql> desc address_book;
++--------------+--------------+------+-----+---------+-------+
+| Field        | Type         | Null | Key | Default | Extra |
++--------------+--------------+------+-----+---------+-------+
+| first_name   | varchar(200) | YES  |     | NULL    |       |
+| last_name    | varchar(200) | YES  |     | NULL    |       |
+| address      | varchar(250) | NO   |     | NULL    |       |
+| city         | varchar(50)  | YES  |     | NULL    |       |
+| state        | varchar(50)  | YES  |     | NULL    |       |
+| zip          | int          | NO   |     | NULL    |       |
+| phone_num    | int          | NO   |     | NULL    |       |
+| email        | varchar(250) | YES  |     | NULL    |       |
+| contact_type | varchar(250) | NO   |     | NULL    |       |
+| book_name    | varchar(100) | NO   |     | NULL    |       |
+| friend       | varchar(100) | YES  |     | NULL    |       |
+| family       | varchar(100) | YES  |     | NULL    |       |
++--------------+--------------+------+-----+---------+-------+
+12 rows in set (0.04 sec)
+
+======================================================================
+--> UC11 Ability to add person to both Friend and Family
+======================================================================
+
+mysql> insert into address_book values("Anant","Shinde","Hadpsar","Pune","Maharashtra",624308,762083983,"shindeanant@gmail.com","friend","two","Aditya","Atul");
+Query OK, 1 row affected (0.03 sec)
+
+mysql> select * from address_book;
++------------+-----------+-----------+-------+-------------+--------+-----------+-----------------------+--------------+-----------+--------+--------+
+| first_name | last_name | address   | city  | state       | zip    | phone_num | email                 | contact_type | book_name | friend | family |
++------------+-----------+-----------+-------+-------------+--------+-----------+-----------------------+--------------+-----------+--------+--------+
+| Aditya     | Done      | Vimannagr | Latur | Maharashtra | 624308 | 762083983 | shindeanant@gmail.com | Profession   | one       | NULL   | NULL   |
+| Anant      | Shinde    | Hadpsar   | Pune  | Maharashtra | 624308 | 762083983 | shindeanant@gmail.com | friend       | two       | Aditya | Atul   |
++------------+-----------+-----------+-------+-------------+--------+-----------+-----------------------+--------------+-----------+--------+--------+
+2 rows in set (0.00 sec)
